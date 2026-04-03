@@ -2,7 +2,7 @@
 nixPkgs = ["python310", "python310Packages.pip"]
 
 [phases.build]
-cmds = ["pip install rasa==3.6.21"]
+cmds = ["pip install rasa==3.6.21 --break-system-packages"]
 
 [start]
 cmd = "rasa run --enable-api --model models --port $PORT --cors \"*\""
