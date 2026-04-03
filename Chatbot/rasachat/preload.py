@@ -1,6 +1,5 @@
 import socket
 import threading
-import time
 import os
 
 def hold_port():
@@ -9,15 +8,17 @@ def hold_port():
     port = int(os.environ.get('PORT', 10000))
     s.bind(('0.0.0.0', port))
     s.listen(5)
-    print(f"Preload holding port {port}")
-    # Keep alive until Rasa takes over
+    print(f"Preload holding HTTP port {port}")
     while True:
         try:
             conn, addr = s.accept()
+            conn.sendall(b"HTTP/1.1 200 OK\r\nContent-Length: 2\r\n\r\nOK")
             conn.close()
         except:
             break
 
 t = threading.Thread(target=hold_port, daemon=True)
 t.start()
-time.sleep(2)  # Give it a moment to bind before Rasa starts
+
+import time
+time.sleep(2)
